@@ -10,10 +10,15 @@ def emotion_detector(text_to_analyze):
     emotions = formatted_response["emotionPredictions"][0]["emotion"]
     max_emotion_score = 0
     max_emotion = "anger"
-    for emotion in emotions:
-        if emotions[emotion] > max_emotion_score:
-            max_emotion_score = emotions[emotion]
-            max_emotion = emotion
+    if response.status_code == 400:
+        for emotion in emotions:
+            emotions[emotion] = None
+        max_emotion = None
+    elif response.status_code == 200:
+        for emotion in emotions:
+            if emotions[emotion] > max_emotion_score:
+                max_emotion_score = emotions[emotion]
+                max_emotion = emotion
     anger_score = emotions["anger"]
     disgust_score = emotions["disgust"]
     fear_score = emotions["fear"]
